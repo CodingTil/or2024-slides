@@ -348,6 +348,21 @@ z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{
 	\end{equation*}
 \end{frame}
 
+\begin{frame}
+\frametitle{Differences}
+\begin{tabular}{c|c}
+Vanderbeck's Generic Branching & Component Bound Branching \\
+\hline\hline
+tightens bounds in \SP{} & adds new variables and constraints to \SP{} \\
+$\rightarrow$ use special algorithms & $\rightarrow$ fall back to \MIP{} solver
+\pause
+\\
+\hline
+refines component bounds & does not refine component bounds \\
+$\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower to solve
+\end{tabular}
+\end{frame}
+
 \section{Generic Mastercuts}
 
 \begin{frame}
@@ -382,7 +397,6 @@ z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{
 \begin{itemize}
 \item	Vanderbeck's Generic Branching vs. Component Bound Branching Rule
 \item	Dual Value Stabilization: Root-Only vs. Full-Tree
-\item	How many Component Bounds are required?
 \end{itemize}
 \end{frame}
 
@@ -410,22 +424,6 @@ z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{
 \end{figure}
 \end{frame}
 
-\begin{frame}
-\frametitle{Evaluation}
-\centering
-\begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/avg_num_bounds.svg}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Evaluation}
-\centering
-\begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/avg_num_bounds_vs_depth.svg}
-\end{figure}
-\end{frame}
-
 \section{Conclusion}
 
 \begin{frame}
@@ -450,6 +448,24 @@ z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{
 \huge Appendix
 \centering
 \begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/num_bounds.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\huge Appendix
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/avg_num_bounds.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\huge Appendix
+\centering
+\begin{figure}
 \includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/depths_distribution.svg}
 \end{figure}
 \end{frame}
@@ -459,7 +475,7 @@ z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{
 \huge Appendix
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/num_bounds.svg}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/avg_num_bounds_vs_depth.svg}
 \end{figure}
 \end{frame}
 
