@@ -1,0 +1,466 @@
+\documentclass[compress,beamer,aspectratio=169,english,usenames,dvipsnames]{beamer}
+
+% Packages
+\usepackage[english]{babel} % Set document language
+\usepackage{pdfpages} % Include PDF files
+\usepackage[utf8]{inputenc} % UTF-8 encoding (for umlauts etc.)
+\usepackage[T1]{fontenc} % correct hyphenation
+\usepackage{csquotes} % correct quotation marks
+\usepackage{lmodern} % Computer Modern fonts
+\usepackage{microtype} % better typesetting results (avoids underfull / overfull hboxes)
+\usepackage{graphicx} % adding graphics
+\usepackage{units} % typesetting units, e.g., \unit[10]{MB} and \unitfrac[100]{Mbit}{s}
+\usepackage{booktabs} % publication quality tables
+\usepackage{setspace} % Set line spacing
+\usepackage{geometry} % Set page margins
+\usepackage{subcaption} % Subfigures
+\usepackage{float} % Floats
+\usepackage[
+	backend=biber,
+	style=authoryear,
+	doi=false,
+	url=false
+]{biblatex} % Bibliography
+\usepackage{hyperref} % Hyperlinks
+\usepackage[super]{nth} % Superscript for numbers
+\usepackage{amsmath} % Math symbols
+\usepackage{amssymb} % Math symbols
+\usepackage{mathtools} % Math symbols
+\usepackage{amsthm} % Math symbols
+\usepackage{bm} % Bold math symbols
+\usepackage{tikz} % Drawing
+\usepackage{tikz-qtree} % Drawing trees
+\usepackage{etoolbox} % Patching
+\usepackage{multicol} % Multiple columns
+\usepackage{accents} % Math accentsdef
+\usepackage[normalem]{ulem} % Underlining
+\usepackage{etoolbox} % Patching
+\usepackage{listings} % Code listings
+\usepackage{bbm} % Blackboard bold
+\usepackage{svg} % SVG images
+
+% Custom Definitions
+\input{common-resources.tex}
+\input{class-beamer.tex}
+\input{definitions.tex}
+
+% Literature
+\addbibresource{literature.bib}
+\setbeamertemplate{bibliography item}{}
+\usepackage{xpatch}
+\xpatchbibmacro{name:andothers}{%
+  \bibstring{andothers}%
+}{%
+  \bibstring[\emph]{andothers}%
+}{}{}
+\renewbibmacro{in:}{}
+
+\DeclareDocumentCommand\courseTitle{}{Component Bound Branching in a Branch-and-Price Framework}
+\DeclareDocumentCommand\exerciseSpeakerName{}{Til Mohr}
+\DeclareDocumentCommand\exerciseSpeakerMail{}{\email{til.mohr@rwth-aachen.de}}
+\DeclareDocumentCommand\exerciseTopic{}{}
+
+
+\begin{document}
+
+\begin{frame}[plain]
+\title{\courseTitle}
+\subtitle{\exerciseTopic}
+\author{\textbf{Til Mohr}\newline
+	\url{til.mohr@rwth-aachen.de}\smallskip\smallskip\newline
+	%
+	Master thesis at the \newline
+	Chair of Operations Research @ RWTH Aachen\newline
+	\url{www.or.rwth-aachen.de}\smallskip\newline
+	%
+}
+\date{September 5, 2024}
+\titlepage
+
+\vspace{-1cm}
+\begin{columns}
+	\begin{column}{0.5\textwidth}
+		%partner logo if appropriate
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		\begin{center}
+			\includegraphics[height=1.5cm]{graphics/OR-logo-cmyk.pdf}
+		\end{center}
+	\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+\nocite{*}
+
+\section{Introduction}
+\begin{frame}
+\frametitle{Dantzig-Wolfe Reformulation for \IP{}s}
+\begin{itemize}
+\item	consider the following bounded integer program (\IP{}):
+		\begin{equation*}
+		\begin{aligned}
+		z^*_\IP{} = &\min & \mat{c}\transpose \mat{x} & & & \\
+		&\st & \mat{A} \mat{x} & \geq \mat{b} & \left[\mat{\pi}_\mat{b}\right] & \\
+		&& \mat{D} \mat{x} & \geq \mat{d} & \left[\mat{\pi}_\mat{d}\right] & \\
+		&& \mat{x} & \in \mathbb{Z}_ +^n
+		\end{aligned}
+		\end{equation*}
+\item	we want to solve this \IP{} using Column Generation (CG)
+\pause
+\item[$\rightarrow$]	Apply Dantzig-Wolfe Reformulation
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dantzig-Wolfe Reformulation for \IP{}s}
+
+\begin{itemize}
+\item	reformulation using discretization yields the master problem (\MP{}):
+		\begin{equation*}
+		\begin{aligned}
+		z^*_\MP{} = &\min & \sum_{q \in Q} c_q \lambda_q & & & \\
+		&\st & \sum_{q \in Q} \mat{a}_q \lambda_q & \geq \mat{b} & \left[\mat{\pi}_\mat{b}\right] \\
+		&& \sum_{q \in Q} \lambda_q & = 1 & \left[\pi_0 \right] & \\
+		&& \lambda_q & \in \{0, 1\} & & \forall q \in Q
+		\end{aligned}
+		\end{equation*}
+\item	and the subproblem (\SP{}):
+		\begin{equation*}
+		\begin{aligned}
+		z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{A} \right) \mat{x} - \pi_0 & & \\
+		&\st & \mat{D} \mat{x} & \geq \mat{d} & \left[\mat{\pi}_\mat{d}\right] \\
+		&& \mat{x} & \in \mathbb{Z}_+^n
+		\end{aligned}
+		\end{equation*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Branch-and-Price}
+Branch-and-Price Algorithm:
+\begin{enumerate}
+\item solve the relaxed \MP{} using CG to optimality
+\item branch, if $\vec{\lambda}^*$ is fractional
+\item repeat
+\end{enumerate}
+
+\vspace{1em}
+
+\pause
+But how to branch?
+\begin{itemize}
+\item	branching on a single $\lambda_q$ is unbalanced:\\$\lambda_q \leq 0$ forbids almost nothing, $\lambda_q \geq 1$ forbids much
+\pause
+\item[$\rightarrow$]	branch on a set of columns $Q' \subset Q$, such that:
+		\begin{equation*}
+		\sum_{q \in Q'} \lambda_q^* \eqqcolon K \not\in \mathbb{Z}
+		\end{equation*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Component Bound Sequences}
+\begin{itemize}
+\item	to find such a set $Q'$ of columns, we find a component bound sequence:
+		\begin{equation*}
+		S \coloneqq \{ \left( x_i, \eta_i, v_i \right) \mid \eta_i \in \{\leq, \geq\}, v_i \in \mathbb{Z} \}
+		\end{equation*}
+\pause
+\item	a master variable $\lambda_q$ satisfies a component bound $\left( x_i, \eta_i, v_i \right)$ if:
+		\begin{equation*}
+		x_{q,i} \; \eta_i \; v_i
+		\end{equation*}
+\item	we define $Q'$ as the set of columns, that satisfy all component bounds in $S$
+\item	there always exists a component bound sequence $S$ such that:
+		\begin{equation*}
+		\sum_{q \in Q'} \lambda_q^* = K \not\in \mathbb{Z}
+		\end{equation*}
+\pause
+\item	how do we enforce this?
+\end{itemize}
+\end{frame}
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+	\frametitle{Table of Contents}
+	\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\section{Vanderbeck's Generic Branching}
+
+\begin{frame}
+\frametitle{Overview of Vanderbeck's Generic Branching Scheme}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+	\centering
+	\begin{tikzpicture}
+		% Define the red area coordinates
+		\coordinate (R1) at (2,4);
+		\coordinate (R2) at (4,3);
+		\coordinate (R3) at (5,1);
+		\coordinate (R4) at (2,1);
+		% Draw the red area with medium transparency
+		\fill[red, opacity=0.25] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
+		% Outline the red area
+		\draw[red, thick] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
+
+		\only<2->{
+			% Define the blue area coordinates
+			\coordinate (B1) at (0,0);
+			\coordinate (B2) at (2,4);
+			\coordinate (B3) at (2,-2);
+			\coordinate (B4) at (0,0);
+			% Draw the blue area with medium transparency
+			\fill[blue, opacity=0.25] (B1) -- (B2) -- (B3) -- (B4) -- cycle;
+			% Outline the blue area
+			\draw[blue, thick] (B1) -- (B2) -- (B3) -- (B4) -- cycle;
+
+			% Define the green area coordinates
+			\coordinate (G1) at (2,1);
+			\coordinate (G2) at (5,1);
+			\coordinate (G3) at (2,-2);
+			% Draw the green area with medium transparency
+			\fill[OliveGreen, opacity=0.25] (G1) -- (G2) -- (G3) -- cycle;
+			% Outline the green area
+			\draw[OliveGreen, thick] (G1) -- (G2) -- (G3) -- cycle;
+		}
+
+		% Define the coordinates of the polygon
+		\coordinate (A) at (0,0);
+		\coordinate (B) at (2,4);
+		\coordinate (C) at (4,3);
+		\coordinate (D) at (5,1);
+		\coordinate (E) at (2,-2);
+
+		% Draw the black 5-cornered polygon
+		\draw[thick] (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+	\end{tikzpicture}
+\end{column}
+\begin{column}{0.5\textwidth}
+	\begin{itemize}
+	\item	assume we have found a component bound Sequence\\
+			${\color{red} S = \{ \left( x_1, \geq, 1 \right), \left( x_2, \geq, 2 \right) \}}$
+	\pause
+	\vspace{0.5em}
+	\item	create $\abs{S} + 1 = 3$ child nodes:
+			\begin{enumerate}
+			\item	${\color{blue} S_1 \coloneqq \{ \left( x_1, <, 1 \right) \}}$
+			\item	${\color{OliveGreen} S_2 \coloneqq \{ \left( x_1, \geq, 1 \right), \left( x_2, <, 2 \right) \}}$
+			\item	${\color{red} S_3 \coloneqq \{ \left( x_1, \geq, 1 \right), \left( x_2, \geq, 2 \right) \}}$
+			\end{enumerate}
+	\vspace{0.5em}
+	\item	search for solutions only within these regions
+	\pause
+	\item	refine the regions in deeper nodes
+	\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Enforcing a Component Bound Sequence $S_j$ in Node $j$}
+\begin{itemize}
+\item	to the \MP{} add constraint:
+		\begin{equation*}
+		\sum_{q \in Q'_j} \lambda_q \geq K_j
+		\end{equation*}
+\item	move the bounds in the \SP{}:
+		\begin{equation*}
+		\begin{aligned}
+		x_i & \geq v_i & \forall \left( x_i, \geq, v_i \right) \in S_j \\
+		x_i & \leq v_i & \forall \left( x_i, \leq, v_i \right) \in S_j \\
+		\end{aligned}
+		\end{equation*}
+\end{itemize}
+\end{frame}
+
+\section{Component Bound Branching Rule}
+
+\begin{frame}
+\frametitle{Component Bound Branching Rule}
+Again:
+\begin{itemize}
+\item	find a subset $Q'$ of columns using a component bound sequence $S$:
+		\begin{equation*}
+		S \coloneqq \{ \left( x_i, \eta_i, v_i \right) \mid \eta_i \in \{\leq, \geq\}, v_i \in \mathbb{Z} \}
+		\end{equation*}
+\item	such that: \quad $\sum_{q \in Q'} \lambda_q^* = K \not\in \mathbb{Z}$
+\end{itemize}
+
+\pause
+
+Alternative scheme:
+\begin{itemize}
+\item	create binary search tree:
+		\begin{multicols}{2}
+		\noindent
+		\begin{minipage}{\linewidth}
+		\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
+		\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
+		\begin{equation*}
+		\sum_{q \in Q'} \lambda_q \leq \floor{K} \quad \left[\gamma\right]
+		\end{equation*}
+		\end{minipage}
+
+		\columnbreak
+
+		\noindent
+		\begin{minipage}{\linewidth}
+		\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
+		\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
+		\begin{equation}
+		\sum_{q \in Q'} \lambda_q \geq \ceil{K} \quad \left[\gamma\right]
+		\end{equation}
+		\end{minipage}
+		\end{multicols}
+\pause
+\item	allows for solutions violating $S$ to be found / generated
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Component Bound Branching Rule}
+
+\begin{itemize}
+\item	\SP{} determines whether a new column is in $Q'$, i.e., satisfies $S$
+\item	create new variable $y \in \{0, 1\}$ along new constraints, such that: $y = 1 \Leftrightarrow \vec{x} \in S$
+\end{itemize}
+
+\pause
+
+\begin{equation*}
+\begin{aligned}
+z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{A} \right) \mat{x} {\color{blue} - \gamma y} - \pi_0 & & \\
+&\st & \mat{D} \mat{x} & \geq \mat{d} & \\
+&& {\color{blue} y = 1} &{\color{blue} \Leftrightarrow \sum_{i \in S} y_i = \abs{S}} & \\
+&& {\color{blue} y_i = 1} &{\color{blue} \Leftrightarrow x_i \leq v_i }& {\color{blue} \forall \left( x_i, \eta_i, v_i \right) \in S} \\
+&& {\color{blue} y} &{\color{blue} \in \{0, 1\}} & \\
+&& {\color{blue} y_i} &{\color{blue} \in \{0, 1\}} & {\color{blue} \forall \left( x_i, \eta_i, v_i \right) \in S} \\
+&& \mat{x} & \in \mathbb{Z}_+^n
+\end{aligned}
+	\end{equation*}
+\end{frame}
+
+\section{Generic Mastercuts}
+
+\begin{frame}
+\frametitle{Master Constraints without Original Formulation}
+
+\begin{itemize}
+\item	\GCG{} solver only allows adding original constraints, which are reformulated
+\item	we want to add constraint \MP{}:
+		\begin{equation*}
+		\sum_{p \in P} \operatorname{f}(p) \lambda_p + \sum_{r \in R} \operatorname{f}(r) \lambda_r \leq f \qquad \left[\gamma\right]
+		\end{equation*}
+\item	with the following modification to the pricing problem:
+		\begin{equation*}
+		\begin{aligned}
+		z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{A} \right) \mat{x} {\color{blue} -\gamma y} - \pi_0 & & \\
+		&\st & \mat{D} \mat{x} & \geq \mat{d} & \left[\mat{\pi}_\mat{d}\right] \\
+		&& {\color{blue} y} & {\color{blue} = \operatorname{f}(\mat{x})} & \\
+		&& \mat{x} & \in \mathbb{Z}_+^n \\
+		&& {\color{blue} y} & {\color{blue} \in Y}
+		\end{aligned}
+		\end{equation*}
+\pause
+\item[$\rightarrow$]	new interface in \GCG{} to create and manage such constraints
+\end{itemize}
+\end{frame}
+
+\section{Evaluation}
+
+\begin{frame}
+\frametitle{Core Evaluation Questions}
+
+\begin{itemize}
+\item	Vanderbeck's Generic Branching vs. Component Bound Branching Rule
+\item	Dual Value Stabilization: Root-Only vs. Full-Tree
+\item	How many Component Bounds are required?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/solve_status.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/times.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/outperforms_generic.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/avg_num_bounds.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/avg_num_bounds_vs_depth.svg}
+\end{figure}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+\frametitle{Conclusion}
+
+\begin{itemize}
+\item	implemented a new interface for managing generic mastercuts in \GCG{}
+\item	implemented a simple branching rule for component bound sequences using generic mastercuts
+\item	Vanderbeck's Generic Branching Scheme outperforms the Component Bound Branching Rule
+\item	implemenation of the Component Bound Branching Rule showcases the potential of the new interface
+\item[$\rightarrow$]	opens up new possibilities for future research (e.g., master separators)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\printbibliography[heading=none]
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\huge Appendix
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/depths_distribution.svg}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\huge Appendix
+\centering
+\begin{figure}
+\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/num_bounds.svg}
+\end{figure}
+\end{frame}
+
+\end{document}

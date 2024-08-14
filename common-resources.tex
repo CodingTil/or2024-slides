@@ -1,0 +1,50 @@
+% OR logo
+\pgfdeclareimage[height=22mm]{orlogo}{graphics/OR-logo-cmyk.pdf}
+
+% Images
+\pgfdeclareimage[height=6mm]{tocicon}{graphics/bullet-list.png}
+\pgfdeclareimage[height=6mm]{rewicon}{graphics/rewind.png}
+\pgfdeclareimage[height=6mm]{ffwicon}{graphics/fast-forward.png}
+\pgfdeclareimage[height=6mm]{excicon}{graphics/writing.png}
+
+% RWTH colors
+\definecolor{rwth-blue}{RGB}{0,84,159}
+\definecolor{rwth-lblue}{RGB}{142,186,229}
+\definecolor{rwth-purple}{RGB}{122,111,172}
+\definecolor{rwth-violet}{RGB}{97,33,88}
+\definecolor{rwth-carmine}{RGB}{161,16,53}
+\definecolor{rwth-red}{RGB}{204,7,30}
+\definecolor{rwth-magenta}{RGB}{227,0,102}
+\definecolor{rwth-orange}{RGB}{246,168,0}
+\definecolor{rwth-yellow}{RGB}{255,237,0}
+\definecolor{rwth-grass}{RGB}{189,171,39}
+\definecolor{rwth-green}{RGB}{87,171,39}
+\definecolor{rwth-cyan}{RGB}{0,152,161}
+\definecolor{rwth-teal}{RGB}{0,97,101}
+\definecolor{rwth150red}{HTML}{a11035}
+
+\DeclareDocumentCommand\colorsOn{}{
+  \definecolor{visual-red}{RGB}{255,0,0}
+  \definecolor{visual-blue}{RGB}{0,0,255}
+  \definecolor{visual-green}{RGB}{0,128,0}
+  \definecolor{visual-purple}{RGB}{220,0,220}
+  \definecolor{visual-orange}{RGB}{255,128,0}
+  \definecolor{visual-cyan}{RGB}{0,200,200}
+}
+\DeclareDocumentCommand\colorsOff{}{
+  \definecolor{visual-red}{RGB}{0,0,0}
+  \definecolor{visual-blue}{RGB}{0,0,0}
+  \definecolor{visual-green}{RGB}{0,0,0}
+  \definecolor{visual-purple}{RGB}{0,0,0}
+  \definecolor{visual-orange}{RGB}{0,0,0}
+  \definecolor{visual-cyan}{RGB}{0,0,0}
+}
+
+\colorsOn
+
+\DeclareDocumentCommand\red{m}{\textcolor{visual-red}{#1}}
+\DeclareDocumentCommand\blue{m}{\textcolor{visual-blue}{#1}}
+\DeclareDocumentCommand\green{m}{\textcolor{visual-green}{#1}}
+\DeclareDocumentCommand\purple{m}{\textcolor{visual-purple}{#1}}
+\DeclareDocumentCommand\orange{m}{\textcolor{visual-orange}{#1}}
+\DeclareDocumentCommand\cyan{m}{\textcolor{visual-cyan}{#1}}

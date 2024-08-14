@@ -1,0 +1,47 @@
+% Functions &
+\newcommand{\polyhedron}[1]{\mathcal{#1}}
+\newcommand{\mat}[1]{{\bm{#1}}}
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\conv}[0]{\operatorname{conv}}
+\newcommand{\raycone}[0]{\operatorname{cone}}
+\newcommand{\transpose}[0]{^\intercal}
+\renewcommand{\setminus}{\backslash}
+\newcommand{\rank}[0]{\operatorname{rank}}
+\newcommand{\st}[0]{\operatorname{s.t.}}
+\newcommand{\LP}[0]{\textit{LP}}
+\newcommand{\DP}[0]{\textit{DP}}
+\newcommand{\IP}[0]{{\textit{IP}}}
+\newcommand{\MIP}[0]{\textit{MIP}}
+\newcommand{\MP}[0]{{\textit{MP}}}
+\newcommand{\LR}[1]{\textit{LR}\ifstrempty{#1}{}{\left({#1}\right)}}
+\newcommand{\LDP}[0]{\textit{LDP}}
+\newcommand{\RMP}[0]{\textit{RMP}}
+\newcommand{\SP}[1]{{\textit{SP}\ifstrempty{#1}{}{^{#1}}}}
+\newcommand{\RCP}[0]{\textit{RCP-SP}}
+\newcommand{\FP}[0]{\textit{FP-SP}}
+\newcommand{\SCIP}[0]{\texttt{SCIP}}
+\newcommand{\GCG}[0]{\texttt{GCG}}
+\newcommand{\indexset}[1]{\mathcal{#1}}
+
+% Math %
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+\let\oldbar\bar
+\newcommand{\ubar}[1]{{\underaccent{\oldbar}{#1}}}
+\renewcommand{\bar}[1]{{\oldbar{#1}}}
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}

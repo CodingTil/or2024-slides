@@ -1,0 +1,58 @@
+\usefonttheme{professionalfonts}
+
+\useinnertheme{rounded}
+\usecolortheme{rose}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{items}[triangle]
+\setbeamertemplate{footline}{\textcolor{rwth-lblue}{\enspace\vspace*{2mm}%
+    S.\,\insertpagenumber}}
+
+\setlength{\unitlength}{1mm}
+
+\logo{\vspace*{-7mm}\scalebox{0.5}{\pgfuseimage{orlogo}}}
+
+
+% beamer colors
+\setbeamercolor{structure}{fg=rwth-blue, bg=rwth-lblue!10}
+\setbeamercolor{alerted text}{fg=rwth-red}
+\setbeamercolor{title}{fg=rwth-blue}
+
+% algorithm2e
+\usepackage[ngerman,ruled,vlined]{algorithm2e}
+\SetKwInput{KwData}{Input}
+\SetKwInput{KwResult}{Output}
+\SetKw{KwGoto}{goto}
+\SetKw{KwWith}{with}
+\SetKw{AND}{and}
+\SetKw{OR}{or}
+\SetKw{GOTO}{go to}
+\SetKw{STOP}{STOP.}
+
+% captions
+\usepackage{caption}
+\captionsetup[figure]{labelfont={scriptsize, color=rwth-blue}, textfont={scriptsize}}
+\captionsetup[table]{labelfont={scriptsize, color=rwth-blue}, textfont={scriptsize}}
+
+\newcommand{\includelines}[2]{\lstinputlisting[linerange={#2}]{#1}}
+\newcommand{\includecode}[2][c]{\lstinputlisting[caption=#2,escapechar=]{#2}}
+
+% maths
+%\newcommand{\conv}{\operatorname{conv}}
+%\newcommand{\T}{\ensuremath^t}
+%\newcommand{\g}{\raisebox{0.25ex}{\tiny $>$}}
+%\newcommand{\lt}{\raisebox{0.25ex}{\tiny $<$}}
+%\newcommand{\subto}{\operatorname{s.t.}}
+%
+%% sets (natural numbers, integers, rationals, reals)
+%\newcommand{\N}{\ensuremath{\mathbb{N}}}
+%\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+%\newcommand{\R}{\ensuremath{\mathbb{R}}}
+%\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+%
+%% column definitions for simplex tableaus
+%\newcolumntype{R}{>{\raggedleft\arraybackslash\rule[-1.5ex]{0pt}{4ex}$}m{1.7em}<{$}}
+%\newcommand{\var}[1]{\multicolumn{1}{R}{#1}}
+%
+%% further commands
+%\newcommand{\engl}[1]{\textcolor{rwth-lblue}{\footnotesize\enspace #1}}
