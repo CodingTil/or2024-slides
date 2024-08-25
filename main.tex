@@ -19,7 +19,9 @@
 	backend=biber,
 	style=authoryear,
 	doi=false,
-	url=false
+	url=false,
+	maxcitenames=1,
+	uniquelist=false
 ]{biblatex} % Bibliography
 \usepackage{hyperref} % Hyperlinks
 \usepackage[super]{nth} % Superscript for numbers
@@ -37,7 +39,6 @@
 \usepackage{etoolbox} % Patching
 \usepackage{listings} % Code listings
 \usepackage{bbm} % Blackboard bold
-\usepackage{svg} % SVG images
 
 % Custom Definitions
 \input{common-resources.tex}
@@ -88,11 +89,6 @@
 		\end{center}
 	\end{column}
 \end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Table of Contents}
-\tableofcontents
 \end{frame}
 
 \nocite{*}
@@ -164,7 +160,7 @@ But how to branch?
 \end{frame}
 
 \begin{frame}
-\frametitle{Component Bound Sequences}
+\frametitle{Component Bound Sequences - \cite{vanderbeck1996exact}}
 \begin{itemize}
 \item	to find such a set $Q'$ of columns, we find a component bound sequence:
 		\begin{equation*}
@@ -178,60 +174,48 @@ But how to branch?
 \item	we define $Q'$ as the set of columns, that satisfy all component bounds in $S$
 \item	there always exists a component bound sequence $S$ such that:
 		\begin{equation*}
-		\sum_{q \in Q'} \lambda_q^* = K \not\in \mathbb{Z}
+		\sum_{q \in Q'} \lambda_q^* \in \left(0, 1\right)
 		\end{equation*}
-\pause
-\item	how do we enforce this?
 \end{itemize}
 \end{frame}
 
-\AtBeginSection[]
-{
-	\begin{frame}<beamer>
-	\frametitle{Table of Contents}
-	\tableofcontents[currentsection]
-	\end{frame}
-}
+\begin{frame}
+\frametitle{Component Bound Sequences - \cite{vanderbeck1996exact}}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{tabular}{c||c|c|c|c}
+ & $q_1$ & $q_2$ & $q_3$ & $q_4$ \\
+\hline\hline
+$x_{1,q_i}$ & 1 & 1 & 2 & 2 \\
+$x_{2,q_i}$ & 1 & 2 & 1 & 2 \\
+\hline\hline
+$\lambda^*_{q_i}$ & 0.25 & 0.25 & 0.25 & 0.25 \\
+\end{tabular}
+\end{column}
+\begin{column}{0.5\textwidth}
+\pause
+\begin{itemize}
+\item	Find $S = \{ \left( x_1, \leq, 1 \right) \}$
+\item	$Q' = \{ q_1, q_2 \}$
+\item 	$\sum_{q \in Q'} \lambda_q^* = 0.5 \not\in \mathbb{Z}$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
 
 \section{Vanderbeck's Generic Branching}
 
+\begin{frame}<beamer>
+\frametitle{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+
 \begin{frame}
-\frametitle{Overview of Vanderbeck's Generic Branching Scheme}
+\frametitle{Vanderbeck's Generic Branching Scheme - \cite{vanderbeck2011branching}}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 	\centering
 	\begin{tikzpicture}
-		% Define the red area coordinates
-		\coordinate (R1) at (2,4);
-		\coordinate (R2) at (4,3);
-		\coordinate (R3) at (5,1);
-		\coordinate (R4) at (2,1);
-		% Draw the red area with medium transparency
-		\fill[red, opacity=0.25] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
-		% Outline the red area
-		\draw[red, thick] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
-
-		\only<2->{
-			% Define the blue area coordinates
-			\coordinate (B1) at (0,0);
-			\coordinate (B2) at (2,4);
-			\coordinate (B3) at (2,-2);
-			\coordinate (B4) at (0,0);
-			% Draw the blue area with medium transparency
-			\fill[blue, opacity=0.25] (B1) -- (B2) -- (B3) -- (B4) -- cycle;
-			% Outline the blue area
-			\draw[blue, thick] (B1) -- (B2) -- (B3) -- (B4) -- cycle;
-
-			% Define the green area coordinates
-			\coordinate (G1) at (2,1);
-			\coordinate (G2) at (5,1);
-			\coordinate (G3) at (2,-2);
-			% Draw the green area with medium transparency
-			\fill[OliveGreen, opacity=0.25] (G1) -- (G2) -- (G3) -- cycle;
-			% Outline the green area
-			\draw[OliveGreen, thick] (G1) -- (G2) -- (G3) -- cycle;
-		}
-
 		% Define the coordinates of the polygon
 		\coordinate (A) at (0,0);
 		\coordinate (B) at (2,4);
@@ -241,18 +225,48 @@ But how to branch?
 
 		% Draw the black 5-cornered polygon
 		\draw[thick] (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+
+		% Define the red area coordinates
+		\coordinate (R1) at (2.5,3.75);
+		\coordinate (R2) at (4,3);
+		\coordinate (R3) at (4.75,1.5);
+		\coordinate (R4) at (2.5,1.5);
+		% Draw the red area with medium transparency
+		\fill[red, opacity=0.25] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
+		% Outline the red area
+		\draw[red, thick] (R1) -- (R2) -- (R3) -- (R4) -- cycle;
+
+		\only<2->{
+			% Define the blue area coordinates
+			\coordinate (B1) at (0,0);
+			\coordinate (B2) at (1.5,3);
+			\coordinate (B3) at (1.5,-1.5);
+			% Draw the blue area with medium transparency
+			\fill[blue, opacity=0.25] (B1) -- (B2) -- (B3) -- cycle;
+			% Outline the blue area
+			\draw[blue, thick] (B1) -- (B2) -- (B3) -- cycle;
+
+			% Define the green area coordinates
+			\coordinate (G1) at (2.5,0.5);
+			\coordinate (G2) at (4.5,0.5);
+			\coordinate (G3) at (2.5,-1.5);
+			% Draw the green area with medium transparency
+			\fill[OliveGreen, opacity=0.25] (G1) -- (G2) -- (G3) -- cycle;
+			% Outline the green area
+			\draw[OliveGreen, thick] (G1) -- (G2) -- (G3) -- cycle;
+		}
 	\end{tikzpicture}
 \end{column}
 \begin{column}{0.5\textwidth}
 	\begin{itemize}
-	\item	assume we have found a component bound Sequence\\
+	\item	assume we have found a component bound sequence\\
 			${\color{red} S = \{ \left( x_1, \geq, 1 \right), \left( x_2, \geq, 2 \right) \}}$
 	\pause
 	\vspace{0.5em}
 	\item	create $\abs{S} + 1 = 3$ child nodes:
 			\begin{enumerate}
-			\item	${\color{blue} S_1 \coloneqq \{ \left( x_1, <, 1 \right) \}}$
-			\item	${\color{OliveGreen} S_2 \coloneqq \{ \left( x_1, \geq, 1 \right), \left( x_2, <, 2 \right) \}}$
+			\item	${\color{blue} S_1 \coloneqq \{ \left( x_1, \leq, 0 \right) \}}$
+			\item	${\color{OliveGreen} S_2 \coloneqq \{ \left( x_1, \geq, 1 \right), \left( x_2, \leq, 1 \right) \}}$
 			\item	${\color{red} S_3 \coloneqq \{ \left( x_1, \geq, 1 \right), \left( x_2, \geq, 2 \right) \}}$
 			\end{enumerate}
 	\vspace{0.5em}
@@ -269,7 +283,7 @@ But how to branch?
 \begin{itemize}
 \item	to the \MP{} add constraint:
 		\begin{equation*}
-		\sum_{q \in Q'_j} \lambda_q \geq K_j
+		\sum_{q \in Q'_j} \lambda_q \geq 1
 		\end{equation*}
 \item	move the bounds in the \SP{}:
 		\begin{equation*}
@@ -284,14 +298,14 @@ But how to branch?
 \section{Component Bound Branching Rule}
 
 \begin{frame}
-\frametitle{Component Bound Branching Rule}
+\frametitle{Component Bound Branching Rule - \cite{thebook}}
 Again:
 \begin{itemize}
 \item	find a subset $Q'$ of columns using a component bound sequence $S$:
 		\begin{equation*}
 		S \coloneqq \{ \left( x_i, \eta_i, v_i \right) \mid \eta_i \in \{\leq, \geq\}, v_i \in \mathbb{Z} \}
 		\end{equation*}
-\item	such that: \quad $\sum_{q \in Q'} \lambda_q^* = K \not\in \mathbb{Z}$
+\item	such that: \quad $\sum_{q \in Q'} \lambda_q^* \in \left(0, 1\right)$
 \end{itemize}
 
 \pause
@@ -305,7 +319,7 @@ Alternative scheme:
 		\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
 		\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
 		\begin{equation*}
-		\sum_{q \in Q'} \lambda_q \leq \floor{K} \quad \left[\gamma\right]
+		\sum_{q \in Q'} \lambda_q \leq 0 \quad \left[\gamma\right]
 		\end{equation*}
 		\end{minipage}
 
@@ -316,7 +330,7 @@ Alternative scheme:
 		\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
 		\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
 		\begin{equation}
-		\sum_{q \in Q'} \lambda_q \geq \ceil{K} \quad \left[\gamma\right]
+		\sum_{q \in Q'} \lambda_q \geq 1 \quad \left[\gamma\right]
 		\end{equation}
 		\end{minipage}
 		\end{multicols}
@@ -326,7 +340,7 @@ Alternative scheme:
 \end{frame}
 
 \begin{frame}
-\frametitle{Component Bound Branching Rule}
+\frametitle{Component Bound Branching Rule - \cite{thebook}}
 
 \begin{itemize}
 \item	\SP{} determines whether a new column is in $Q'$, i.e., satisfies $S$
@@ -340,7 +354,8 @@ Alternative scheme:
 z^*_\SP{} = &\min & \left( \mat{c}\transpose - \mat{\pi}_\mat{b}\transpose \mat{A} \right) \mat{x} {\color{blue} - \gamma y} - \pi_0 & & \\
 &\st & \mat{D} \mat{x} & \geq \mat{d} & \\
 && {\color{blue} y = 1} &{\color{blue} \Leftrightarrow \sum_{i \in S} y_i = \abs{S}} & \\
-&& {\color{blue} y_i = 1} &{\color{blue} \Leftrightarrow x_i \leq v_i }& {\color{blue} \forall \left( x_i, \eta_i, v_i \right) \in S} \\
+&& {\color{blue} y_i = 1} &{\color{blue} \Leftrightarrow x_i \leq v_i }& {\color{blue} \forall \left( x_i, \leq, v_i \right) \in S} \\
+&& {\color{blue} y_i = 1} &{\color{blue} \Leftrightarrow x_i \geq v_i }& {\color{blue} \forall \left( x_i, \geq, v_i \right) \in S} \\
 && {\color{blue} y} &{\color{blue} \in \{0, 1\}} & \\
 && {\color{blue} y_i} &{\color{blue} \in \{0, 1\}} & {\color{blue} \forall \left( x_i, \eta_i, v_i \right) \in S} \\
 && \mat{x} & \in \mathbb{Z}_+^n
@@ -369,7 +384,6 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \frametitle{Master Constraints without Original Formulation}
 
 \begin{itemize}
-\item	\GCG{} solver only allows adding original constraints, which are reformulated
 \item	we want to add constraint \MP{}:
 		\begin{equation*}
 		\sum_{p \in P} \operatorname{f}(p) \lambda_p + \sum_{r \in R} \operatorname{f}(r) \lambda_r \leq f \qquad \left[\gamma\right]
@@ -384,8 +398,6 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 		&& {\color{blue} y} & {\color{blue} \in Y}
 		\end{aligned}
 		\end{equation*}
-\pause
-\item[$\rightarrow$]	new interface in \GCG{} to create and manage such constraints
 \end{itemize}
 \end{frame}
 
@@ -394,33 +406,53 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \begin{frame}
 \frametitle{Core Evaluation Questions}
 
+
 \begin{itemize}
+\item	implemented generic mastercuts as a new interface in \GCG{}, \cite{gamrath2010generic}
+\item	implemented component bound branching using this interface
+\end{itemize}
+\vspace{1em}
+\pause
+\begin{enumerate}
 \item	Vanderbeck's Generic Branching vs. Component Bound Branching Rule
 \item	Dual Value Stabilization: Root-Only vs. Full-Tree
+\end{enumerate}
+\vspace{1em}
+\pause
+\begin{itemize}
+\item	extracted 736 from the structured Integer Programming Library (\texttt{strIPlib}), \cite{strIPlib}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Evaluation}
+\frametitle{Evaluation $\cdot$ Solving Status}
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/solve_status.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/general/MostFractional/solve_status.png}
 \end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Evaluation}
+\frametitle{Evaluation $\cdot$ Solving Times}
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/times.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/general/MostFractional/times.png}
 \end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Evaluation}
+\frametitle{Evaluation $\cdot$ Outperformance Rate over \texttt{generic}}
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/general/MostFractional/outperforms_generic.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/general/MostFractional/outperforms_generic.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation $\cdot$ Outperformance Rate over \texttt{generic-mip}}
+\centering
+\begin{figure}
+\includegraphics[height=0.85\textheight]{graphics/slides/general/MostFractional/outperforms_generic-mip.png}
 \end{figure}
 \end{frame}
 
@@ -430,10 +462,8 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \frametitle{Conclusion}
 
 \begin{itemize}
-\item	implemented a new interface for managing generic mastercuts in \GCG{}
-\item	implemented a simple branching rule for component bound sequences using generic mastercuts
-\item	Vanderbeck's Generic Branching Scheme outperforms the Component Bound Branching Rule
-\item	implemenation of the Component Bound Branching Rule showcases the potential of the new interface
+\item	\GCG{} has a {\color{orange} new interface} for generic master constraints
+\item	\GCG{} has a {\color{orange} new branching rule} operating on component bound sequences
 \item[$\rightarrow$]	opens up new possibilities for future research (e.g., master separators)
 \end{itemize}
 \end{frame}
@@ -448,7 +478,7 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \huge Appendix
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/num_bounds.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/bound_stats/num_bounds.png}
 \end{figure}
 \end{frame}
 
@@ -457,7 +487,7 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \huge Appendix
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/avg_num_bounds.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/bound_stats/avg_num_bounds.png}
 \end{figure}
 \end{frame}
 
@@ -466,7 +496,7 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \huge Appendix
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/depths_distribution.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/bound_stats/compbnd/depths_distribution.png}
 \end{figure}
 \end{frame}
 
@@ -475,7 +505,7 @@ $\rightarrow$ \SP{} becomes faster to solve & $\rightarrow$ \SP{} becomes slower
 \huge Appendix
 \centering
 \begin{figure}
-\includesvg[height=0.9\textheight]{graphics/slides/bound_stats/compbnd/avg_num_bounds_vs_depth.svg}
+\includegraphics[height=0.85\textheight]{graphics/slides/bound_stats/compbnd/avg_num_bounds_vs_depth.png}
 \end{figure}
 \end{frame}
 
